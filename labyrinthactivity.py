@@ -1071,13 +1071,12 @@ class LabyrinthActivity(activity.Activity):
 
         # Create the new journal entry
         fileObject = datastore.create()
-        act_meta = self.metadata
-        fileObject.metadata['title'] = act_meta['title'] + ' (TXT)'
+        fileObject.metadata['title'] = self.metadata['title'] + ' (TXT)'
         fileObject.metadata['title_set_by_user'] = \
-            act_meta['title_set_by_user']
+            self.metadata['title_set_by_user']
         fileObject.metadata['mime_type'] = 'text/plain'
 
-        fileObject.metadata['icon-color'] = act_meta['icon-color']
+        fileObject.metadata['icon-color'] = self.metadata['icon-color']
         fileObject.file_path = os.path.join(self.get_activity_root(),
                                             'instance', '%i' % time.time())
         filename = fileObject.file_path
