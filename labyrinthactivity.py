@@ -111,7 +111,7 @@ class MyMenuItem(MenuItem):
 class FontImage(gtk.Image):
 
     _FONT_ICON = \
-'<?xml version="1.0" encoding="UTF-8" standalone="no"?>\
+        '<?xml version="1.0" encoding="UTF-8" standalone="no"?>\
 <svg\
    version="1.1"\
    width="27.5"\
@@ -138,6 +138,7 @@ class FontImage(gtk.Image):
 
 
 class EditToolbar(activity.EditToolbar):
+
     def __init__(self, _parent):
         activity.EditToolbar.__init__(self)
 
@@ -196,6 +197,7 @@ class EditToolbar(activity.EditToolbar):
 
 
 class ViewToolbar(gtk.Toolbar):
+
     def __init__(self, main_area):
         gtk.Toolbar.__init__(self)
 
@@ -284,13 +286,13 @@ class ViewToolbar(gtk.Toolbar):
         # Find thoughts extent
         left = right = upper = lower = None
         for t in self._main_area.thoughts:
-            if right == None or t.lr[0] > right:
+            if right is None or t.lr[0] > right:
                 right = t.lr[0]
-            if lower == None or t.lr[1] > lower:
+            if lower is None or t.lr[1] > lower:
                 lower = t.lr[1]
-            if left == None or  t.ul[0] < left:
+            if left is None or t.ul[0] < left:
                 left = t.ul[0]
-            if upper == None or t.ul[1] < upper:
+            if upper is None or t.ul[1] < upper:
                 upper = t.ul[1]
         width = right - left
         height = lower - upper
@@ -304,12 +306,13 @@ class ViewToolbar(gtk.Toolbar):
         width_scale = float(screen_width) / (width * 1.1)
         height_scale = float(screen_height) / (height * 1.1)
         return {'x': (screen_width / 2.0) - (width / 2.0 + left),
-                'y': (screen_height / 2.0) - (height / 2.0 + upper) + \
-                    style.GRID_CELL_SIZE,
+                'y': (screen_height / 2.0) - (height / 2.0 + upper) +
+                style.GRID_CELL_SIZE,
                 'scale': min(width_scale, height_scale)}
 
 
 class TextAttributesToolbar(gtk.Toolbar):
+
     def __init__(self, main_area):
         gtk.Toolbar.__init__(self)
 
@@ -318,7 +321,7 @@ class TextAttributesToolbar(gtk.Toolbar):
         self._font_sizes = ['8', '9', '10', '11', '12', '14', '16', '20',
                             '22', '24', '26', '28', '36', '48', '72']
 
-        self.font_button =  ToolButton('font-text')
+        self.font_button = ToolButton('font-text')
         self.font_button.set_tooltip(_('Select font'))
         self.font_button.connect('clicked', self.__font_selection_cb)
         self.insert(self.font_button, -1)
@@ -381,7 +384,7 @@ class TextAttributesToolbar(gtk.Toolbar):
         if self._font_palette:
             if not self._font_palette.is_up():
                 self._font_palette.popup(immediate=True,
-                                    state=self._font_palette.SECONDARY)
+                                         state=self._font_palette.SECONDARY)
             else:
                 self._font_palette.popdown(immediate=True)
             return
@@ -479,21 +482,21 @@ class TextAttributesToolbar(gtk.Toolbar):
                 if r[0] > end_index:
                     break
                 if start_index == end_index and \
-                    r[0] < start_index and \
-                    r[1] > start_index:
+                        r[0] < start_index and \
+                        r[1] > start_index:
                     found = True
                 elif start_index != end_index and r[0] <= start_index and \
-                   r[1] >= end_index:
+                        r[1] >= end_index:
                     found = True
             else:
                 if r[0] > start_index:
                     break
                 if start_index == end_index and \
-                    r[0] < start_index and \
-                    r[1] > start_index:
+                        r[0] < start_index and \
+                        r[1] > start_index:
                     found = True
                 elif start_index != end_index and r[0] <= end_index and \
-                   r[1] >= start_index:
+                        r[1] >= start_index:
                     found = True
 
             if found:
@@ -503,14 +506,14 @@ class TextAttributesToolbar(gtk.Toolbar):
                        x.value == pango.WEIGHT_BOLD:
                         attributes["bold"] = False
                     elif x.type == pango.ATTR_STYLE and \
-                         x.value == pango.STYLE_ITALIC:
+                            x.value == pango.STYLE_ITALIC:
                         attributes["italics"] = False
                     elif x.type == pango.ATTR_UNDERLINE and \
-                         x.value == pango.UNDERLINE_SINGLE:
+                            x.value == pango.UNDERLINE_SINGLE:
                         attributes["underline"] = False
                     elif x.type == pango.ATTR_FONT_DESC:
                         attributes["font"] = x.desc
-            if it.next() == False:
+            if not it.next():
                 break
 
         return attributes
@@ -612,6 +615,7 @@ class ThoughtsToolbar(gtk.Toolbar):
 
 
 class ActionButtons():
+
     ''' This class manages the action buttons that move among toolsbars '''
 
     def __init__(self, parent):
@@ -655,7 +659,7 @@ class ActionButtons():
         if HASTOOLBARBOX:
             self._separator_2 = gtk.SeparatorToolItem()
             self._separator_2.props.draw = False
-            #self._separator_2.set_size_request(0, -1)
+            # self._separator_2.set_size_request(0, -1)
             self._separator_2.set_expand(True)
             self._separator_2.show()
             target_toolbar.insert(self._separator_2, -1)
@@ -709,6 +713,7 @@ class ActionButtons():
 
 
 class LabyrinthActivity(activity.Activity):
+
     def __init__(self, handle):
         activity.Activity.__init__(self, handle)
 
@@ -733,6 +738,12 @@ class LabyrinthActivity(activity.Activity):
             tool = ToolButton('png-export')
             tool.set_tooltip(_('Portable Network Graphic (PNG)'))
             tool.connect('clicked', self.__export_png_cb)
+            activity_button.props.page.insert(tool, -1)
+            tool.show()
+
+            tool = ToolButton('txt-export')
+            tool.set_tooltip(_('Plain Text (TXT)'))
+            tool.connect('clicked', self.__export_txt_cb)
             activity_button.props.page.insert(tool, -1)
             tool.show()
 
@@ -788,6 +799,11 @@ class LabyrinthActivity(activity.Activity):
 
             menu_item = MenuItem(_('Portable Network Graphic (PNG)'))
             menu_item.connect('activate', self.__export_png_cb)
+            keep_palette.menu.append(menu_item)
+            menu_item.show()
+
+            menu_item = MenuItem(_('Plain Text (TXT)'))
+            menu_item.connect('activate', self.__export_txt_cb)
             keep_palette.menu.append(menu_item)
             menu_item.show()
 
@@ -858,11 +874,11 @@ class LabyrinthActivity(activity.Activity):
 
         self.hadj = self._sw.get_hadjustment()
         self.hadj.connect("value_changed", self._hadj_adjusted_cb,
-                              self.hadj)
+                          self.hadj)
 
         self.vadj = self._sw.get_vadjustment()
         self.vadj.connect("value_changed", self._vadj_adjusted_cb,
-                              self.vadj)
+                          self.vadj)
 
         self._main_area.drag_menu_cb(self._sw, True)
         self._main_area.drag_menu_cb(self._sw, False)
@@ -899,8 +915,8 @@ class LabyrinthActivity(activity.Activity):
 
         if self._mode == (MMapArea.MODE_TEXT and
                           len(self._main_area.selected)):
-                          # With textview, we are always editing
-                          # and self._main_area.selected[0].editing):
+                            # With textview, we are always editing
+                            # and self._main_area.selected[0].editing):
             self.__change_paste_state(True)
         else:
             self.__change_paste_state(False)
@@ -949,7 +965,8 @@ class LabyrinthActivity(activity.Activity):
         layout.set_alignment(pango.ALIGN_CENTER)
         layout.set_text(_('Click to add\ncentral thought'))
         width, height = layout.get_pixel_size()
-        context.move_to(geom[2] / xf - (width / 2), geom[3] / yf - (height / 2))
+        context.move_to(
+            geom[2] / xf - (width / 2), geom[3] / yf - (height / 2))
         context.show_layout(layout)
 
         round = 40
@@ -1050,6 +1067,48 @@ class LabyrinthActivity(activity.Activity):
         fileObject.destroy()
         del fileObject
 
+    def __export_txt_cb(self, event):
+
+        # Create the new journal entry
+        fileObject = datastore.create()
+        act_meta = self.metadata
+        fileObject.metadata['title'] = act_meta['title'] + ' (TXT)'
+        fileObject.metadata['title_set_by_user'] = \
+            act_meta['title_set_by_user']
+        fileObject.metadata['mime_type'] = 'text/plain'
+
+        fileObject.metadata['icon-color'] = act_meta['icon-color']
+        fileObject.file_path = os.path.join(self.get_activity_root(),
+                                            'instance', '%i' % time.time())
+        filename = fileObject.file_path
+        text_file = open(filename, "w")
+
+        # Convert the thoughts and links to a graph
+        graph = Graph()
+
+        for t in self._main_area.thoughts:
+            graph.add_vertex(t.text)
+
+        for l in self._main_area.links:
+            graph.add_edge(l.parent.text, l.child.text)
+
+        # Print tree function
+        def printTree(temp, level, text_file):
+            for x in graph.graphDict()[temp]:
+                text_file.write('\n' + (level + 1) * '\t' + x)
+                if(graph.graphDict()[x] != {}):
+                    printTree(x, level + 1, text_file)
+
+        # Add text to the file
+        root = self._main_area.links[0].parent.text
+        text_file.write(root)
+        printTree(root, 0, text_file)
+        text_file.close
+
+        datastore.write(fileObject, transfer_ownership=True)
+        fileObject.destroy()
+        del fileObject
+
     def __main_area_focus_cb(self, arg, event, extended=False):
         # Don't steal focus from textview
         # self._main_area.grab_focus()
@@ -1083,7 +1142,7 @@ class LabyrinthActivity(activity.Activity):
 
         self._main_area.update_save()
         manifest = self.serialize_to_xml(self._main_area.save,
-                self._main_area.element)
+                                         self._main_area.element)
         tar.write('MANIFEST', manifest)
         self._main_area.save_thyself(tar)
 
@@ -1103,3 +1162,28 @@ class LabyrinthActivity(activity.Activity):
                                  str(self._main_area.translation))
         string = doc.toxml()
         return string.encode("utf-8")
+
+
+class Graph(object):
+
+    def __init__(self, graph_dict={}):
+        self.__graph_dict = graph_dict
+
+    def vertices(self):
+        return list(self.__graph_dict.keys())
+
+    def edges(self):
+        return self.__generate_edges()
+
+    def graphDict(self):
+        return self.__graph_dict
+
+    def add_vertex(self, vertex):
+        if vertex not in self.__graph_dict:
+            self.__graph_dict[vertex] = []
+
+    def add_edge(self, vertex1, vertex2):
+        if vertex1 in self.__graph_dict:
+            self.__graph_dict[vertex1].append(vertex2)
+        else:
+            self.__graph_dict[vertex1] = [vertex2]
